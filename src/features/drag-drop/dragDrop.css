@@ -1,0 +1,19 @@
+.drag-drop-wrapper{
+  margin: 4rem auto;
+  max-width: 500px;
+  height: 320px;
+  background: var(--color-gray-200);
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--color-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+}
+
+.drag-drop-wrapper:hover{
+  box-shadow: var(--shadow-lg);
+}
