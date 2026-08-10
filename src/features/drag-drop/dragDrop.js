@@ -30,7 +30,7 @@ export function dragDrop() {
     })
 
 
-    fileInput.addEventListener('change', async (event) => {
+    fileInput.addEventListener('change', (event) => {
         console.log(fileInput);
     })
 
