@@ -1,4 +1,4 @@
-.drag-drop-wrapper{
+#drag-drop-wrapper{
   margin: 4rem auto;
   max-width: 500px;
   height: 320px;
@@ -14,6 +14,6 @@
   box-shadow: var(--shadow-md);
 }
 
-.drag-drop-wrapper:hover{
+#drag-drop-wrapper:hover{
   box-shadow: var(--shadow-lg);
 }
