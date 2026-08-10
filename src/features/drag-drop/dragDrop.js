@@ -1,3 +1,5 @@
+import { fileParser } from '../file-parser/fileParser';
+
 export function dragDrop() {
     const section = document.createElement("section");
 
@@ -21,17 +23,16 @@ export function dragDrop() {
     const dropZone = section.querySelector('#drag-drop-wrapper');
     const fileInput = section.querySelector('#drag-drop-wrapper input[type="file"]');
 
-
-
     /* Methods */
 
     dropZone.addEventListener('click', () => {
         fileInput.click();
     })
 
+    fileInput.addEventListener('change', async (event) => {
+        const data = await fileParser(event.target.files[0]);
+        console.log(data);
 
-    fileInput.addEventListener('change', (event) => {
-        console.log(fileInput);
     })
 
     return section;
