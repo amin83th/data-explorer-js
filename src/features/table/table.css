@@ -1,11 +1,15 @@
 .table-wrapper {
+    margin-top: 2rem !important;
     width: 85%;
     overflow: auto;
     margin: auto;
     max-height: 450px;
     scrollbar-color: var(--color-primary) var(--color-gray-300);
     scrollbar-width: thin;
+}
 
+.table-wrapper table{
+    margin: auto;
 }
 
 .table-wrapper table th,

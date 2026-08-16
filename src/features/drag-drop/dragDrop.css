@@ -12,8 +12,16 @@
   cursor: pointer;
   transition: var(--transition);
   box-shadow: var(--shadow-md);
+  transition: all var(--transition);
 }
 
 #drag-drop-wrapper:hover{
   box-shadow: var(--shadow-lg);
+}
+
+.hidden{
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: -100%;
 }

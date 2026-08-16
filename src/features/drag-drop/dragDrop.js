@@ -33,7 +33,9 @@ export function dragDrop() {
     fileInput.addEventListener('change', async (event) => {
         const data = await fileParser(event.target.files[0]);
         const tableElement = table(data);
-        section.append(tableElement);
+        const divDragDrop = document.querySelector("#drag-drop-wrapper");
+        divDragDrop.classList.add("hidden");
+         section.append(tableElement);
     })
 
     return section;
