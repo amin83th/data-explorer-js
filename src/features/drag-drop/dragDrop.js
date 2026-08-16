@@ -1,5 +1,6 @@
+import "./dragDrop.css";
 import { fileParser } from '../file-parser/fileParser';
-
+import { table } from '../table/table';
 export function dragDrop() {
     const section = document.createElement("section");
 
@@ -31,8 +32,8 @@ export function dragDrop() {
 
     fileInput.addEventListener('change', async (event) => {
         const data = await fileParser(event.target.files[0]);
-        console.log(data);
-
+        const tableElement = table(data);
+        section.append(tableElement);
     })
 
     return section;
