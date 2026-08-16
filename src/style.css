@@ -1,5 +1,6 @@
 @import "./root.css";
-@import "./features/drag-drop/dragDrop.css";
+/* @import "./features/drag-drop/dragDrop.css";
+@import "./features/table/table.css"; */
 
 
 html,body{
