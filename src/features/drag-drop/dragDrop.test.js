@@ -52,23 +52,33 @@ describe('dragDrop', () => {
     });
 
     it('should call fileParser when a file is selected', async () => {
+        document.body.append(section);
+
         const fileInput = section.querySelector(
             'input[type="file"]'
         );
+
         const file = new File(
             ['hello'],
             'test.csv',
             { type: 'text/csv' }
         );
-        fileParser.mockResolvedValue({
-            name: 'test.csv',
-            rows: []
-        });
+
+        fileParser.mockResolvedValue([
+            {
+                name: 'Ali',
+                age: 22
+            }
+        ]);
+
         Object.defineProperty(fileInput, 'files', {
             value: [file]
         });
+
         fileInput.dispatchEvent(new Event('change'));
+
         await Promise.resolve();
+
         expect(fileParser).toHaveBeenCalledTimes(1);
         expect(fileParser).toHaveBeenCalledWith(file);
     });
