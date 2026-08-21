@@ -7,5 +7,25 @@ export async function parseXml(file) {
         ignoreAttributes: false
     });
 
-    return parser.parse(text);
+    const parsedData = parser.parse(text);
+
+    return findArray(parsedData);
+}
+
+function findArray(data) {
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    if (typeof data === "object" && data !== null) {
+        for (const key in data) {
+            const result = findArray(data[key]);
+
+            if (result) {
+                return result;
+            }
+        }
+    }
+
+    return null;
 }

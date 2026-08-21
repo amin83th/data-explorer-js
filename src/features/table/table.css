@@ -1,6 +1,7 @@
 .table-wrapper {
     margin-top: 2rem !important;
-    width: 85%;
+    width: fit-content;
+    max-width: 85%;
     overflow: auto;
     margin: auto;
     max-height: 450px;
