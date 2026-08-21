@@ -34,8 +34,10 @@ export function dragDrop() {
         const data = await fileParser(event.target.files[0]);
         const tableElement = table(data);
         const divDragDrop = document.querySelector("#drag-drop-wrapper");
+        const mainText = document.querySelector(".mainText");
         divDragDrop.classList.add("hidden");
-         section.append(tableElement);
+        mainText.classList.add('hidden');
+        section.append(tableElement);
     })
 
     return section;
