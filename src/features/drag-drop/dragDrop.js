@@ -46,10 +46,10 @@ export function dragDrop() {
             table(data)
         );
 
-        const divDragDrop = document.querySelector("#drag-drop-wrapper");
-        const mainText = document.querySelector(".mainText");
+        const divDragDrop = section.querySelector("#drag-drop-wrapper");
+        // const mainText = document.querySelector(".mainText");
         divDragDrop.classList.add("hidden");
-        mainText.classList.add('hidden');
+        // mainText.classList.add('hidden');
 
         section.append(searchElement);
         section.append(tableContainer);
