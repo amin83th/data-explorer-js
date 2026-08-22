@@ -1,6 +1,7 @@
 import "./dragDrop.css";
 import { fileParser } from '../file-parser/fileParser';
 import { table } from '../table/table';
+import { searchBox } from "../search-box/searchBox";
 export function dragDrop() {
     const section = document.createElement("section");
 
@@ -32,12 +33,26 @@ export function dragDrop() {
 
     fileInput.addEventListener('change', async (event) => {
         const data = await fileParser(event.target.files[0]);
-        const tableElement = table(data);
+        const tableContainer = document.createElement("div");
+        tableContainer.classList.add("table-container");
+
+        const searchElement = searchBox((searchValue) => {
+            tableContainer.replaceChildren(
+                table(data, searchValue)
+            );
+        });
+
+        tableContainer.append(
+            table(data)
+        );
+
         const divDragDrop = document.querySelector("#drag-drop-wrapper");
         const mainText = document.querySelector(".mainText");
         divDragDrop.classList.add("hidden");
         mainText.classList.add('hidden');
-        section.append(tableElement);
+
+        section.append(searchElement);
+        section.append(tableContainer);
     })
 
     return section;

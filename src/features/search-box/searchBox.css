@@ -1,0 +1,10 @@
+.search-box {
+    margin-top: 2rem !important;
+    width: fit-content;
+    max-width: 85%;
+    overflow: auto;
+    margin: auto;
+    max-height: 450px;
+    scrollbar-color: var(--color-primary) var(--color-gray-300);
+    scrollbar-width: thin;
+}
