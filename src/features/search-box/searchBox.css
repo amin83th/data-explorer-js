@@ -8,3 +8,15 @@
     scrollbar-color: var(--color-primary) var(--color-gray-300);
     scrollbar-width: thin;
 }
+
+.search-box input{
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-primary);
+}
+
+.search-box button{
+    padding: var(--space-sm);
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+}
