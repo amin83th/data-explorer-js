@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseXml } from "./parseXml";
+import { parseXml } from "./xmlParser";
 
 describe("parseXml", () => {
     it("should parse XML file and return the first array found", async () => {
