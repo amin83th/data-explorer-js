@@ -1,18 +1,18 @@
 # Data Explorer JS
 
-A lightweight **Vanilla JavaScript** application for parsing and exploring data from **XML, Excel, and CSV files** directly in the browser.
+A lightweight Vanilla JavaScript application for parsing, exploring, searching, and viewing data from XML, Excel, and CSV files directly in the browser.
 
-The project is built with modern JavaScript without using a frontend framework, with a focus on clean architecture, feature-based organization, file parsing, and testability.
+The project is built with modern JavaScript without using a frontend framework, with a focus on clean architecture, feature-based organization, reusable UI components, file parsing, and testability.
 
-> 🚧 **Status:** Work in Progress
+> 🚧 Status: Work in Progress
 
 ---
 
 ## ✨ Overview
 
-**Data Explorer JS** is a browser-based data exploration tool that allows users to upload common structured data files and convert their contents into JavaScript data structures.
+Data Explorer JS is a browser-based data exploration tool that allows users to upload common structured data files, convert their contents into JavaScript data structures, and explore the parsed data through a reusable table interface.
 
-The main goal of this project is to build a practical data-processing application using **Vanilla JavaScript**, while keeping the codebase modular, testable, and easy to extend.
+The main goal of this project is to build a practical data-processing application using Vanilla JavaScript, while keeping the codebase modular, testable, and easy to extend.
 
 Supported file formats:
 
@@ -35,21 +35,26 @@ Files can be selected through the file picker or dragged and dropped into the ap
 * 📄 CSV file parsing
 * 🗂️ XML file parsing
 * 🔀 Automatic parser selection based on file extension
+* 📋 Display parsed data in a reusable data table
+* 🔍 Global search functionality
 * 🧩 Feature-based project structure
+* 🎨 Component-based CSS organization
 * 🧪 Unit testing with Vitest
+* 🧪 Tests for file parsers
+* 🧪 Tests for UI components
 * ⚡ Fast development environment powered by Vite
 * 🌐 Runs entirely in the browser
 
 ### Planned
 
-* [ ] Display parsed data in a reusable data table
 * [ ] Column sorting
 * [ ] Column filtering
-* [ ] Global search
 * [ ] Pagination
+* [ ] Data statistics
 * [ ] Export data to JSON
 * [ ] Export data to CSV
 * [ ] Export data to Excel
+* [ ] Export data to XML
 * [ ] Better XML-to-tabular-data transformation
 * [ ] File validation and user-friendly error messages
 * [ ] Loading and processing states
@@ -139,7 +144,16 @@ Run tests once:
 npm run test:run
 ```
 
-The project uses **Vitest** together with **JSDOM** for testing browser-related functionality.
+The project uses Vitest together with JSDOM for testing browser-related functionality.
+
+The current test suite covers core application features, including:
+
+* Drag & drop component behavior
+* File parser selection
+* CSV parser output
+* Excel parser output
+* XML parser behavior
+* Search box functionality
 
 ---
 
@@ -148,21 +162,33 @@ The project uses **Vitest** together with **JSDOM** for testing browser-related 
 ```text
 data-explorer-js/
 │
-├── public/
-│
 ├── src/
 │   ├── assets/
 │   │
 │   ├── features/
 │   │   ├── drag-drop/
 │   │   │   ├── dragDrop.js
+│   │   │   ├── dragDrop.css
 │   │   │   └── dragDrop.test.js
 │   │   │
-│   │   └── file-parser/
-│   │       ├── csvParser.js
-│   │       ├── excelParser.js
-│   │       ├── fileParser.js
-│   │       └── xmlParser.js
+│   │   ├── file-parser/
+│   │   │   ├── csvParser.js
+│   │   │   ├── csvParser.test.js
+│   │   │   ├── excelParser.js
+│   │   │   ├── excelParser.test.js
+│   │   │   ├── fileParser.js
+│   │   │   ├── fileParser.test.js
+│   │   │   ├── xmlParser.js
+│   │   │   └── xmlParser.test.js
+│   │   │
+│   │   ├── search-box/
+│   │   │   ├── searchBox.js
+│   │   │   ├── searchBox.css
+│   │   │   └── searchBox.test.js
+│   │   │
+│   │   └── table/
+│   │       ├── table.js
+│   │       └── table.css
 │   │
 │   ├── main.js
 │   ├── root.css
@@ -170,13 +196,14 @@ data-explorer-js/
 │
 ├── index.html
 ├── package.json
-├── vite.config.js
 ├── vitest.config.js
 ├── LICENSE
 └── README.md
 ```
 
-The project follows a **feature-based structure**, keeping related functionality together instead of placing all JavaScript files into a single directory.
+The project follows a feature-based structure, keeping related functionality together instead of placing all JavaScript files into a single directory.
+
+Each feature is responsible for its own functionality and styling, making the project easier to maintain and extend as new features are added.
 
 ---
 
@@ -188,7 +215,7 @@ The application determines which parser to use based on the uploaded file extens
 User selects or drops a file
               │
               ▼
-        File Input / Drop Zone
+     File Input / Drop Zone
               │
               ▼
           fileParser()
@@ -198,14 +225,22 @@ User selects or drops a file
       CSV    Excel    XML
        │      │       │
        ▼      ▼       ▼
-    PapaParse XLSX  fast-xml-parser
+   PapaParse XLSX  fast-xml-parser
        │      │       │
        └──────┼───────┘
               ▼
-        Parsed JavaScript Data
+      Parsed JavaScript Data
+              │
+              ▼
+         Data Table
+              │
+              ▼
+        Search / Explore
 ```
 
 The central `fileParser()` function acts as the entry point and delegates the file to the appropriate parser based on its extension.
+
+After parsing, the resulting JavaScript data can be rendered inside the data table and explored through the search functionality.
 
 ---
 
@@ -213,9 +248,9 @@ The central `fileParser()` function acts as the entry point and delegates the fi
 
 ### CSV
 
-CSV files are parsed using **Papa Parse**.
+CSV files are parsed using Papa Parse.
 
-```javascript
+```js
 Papa.parse(file, {
     header: true,
     skipEmptyLines: true
@@ -228,7 +263,7 @@ CSV rows are returned as JavaScript objects using the first row as column header
 
 ### Excel
 
-Excel files are parsed using **SheetJS**.
+Excel files are parsed using SheetJS.
 
 Supported extensions:
 
@@ -243,17 +278,19 @@ The first worksheet is currently converted into an array of JavaScript objects.
 
 ### XML
 
-XML files are parsed using **fast-xml-parser**.
+XML files are parsed using fast-xml-parser.
 
-XML attributes are preserved during parsing.
+XML attributes are preserved during parsing, and the parser handles XML data before it is passed into the application's data-processing flow.
+
+XML structures can vary significantly, so some XML documents may still require additional transformation to create a fully tabular dataset.
 
 ---
 
 ## 🧩 Architecture
 
-The application separates file handling from individual parsing implementations.
+The application separates file handling, parsing logic, and UI components.
 
-Instead of putting all parsing logic into one function, each format has its own parser:
+Instead of putting all parsing and rendering logic into one function, responsibilities are divided into independent features.
 
 ```text
 fileParser
@@ -261,11 +298,22 @@ fileParser
     ├── parseCsv
     ├── parseExcel
     └── parseXml
+           │
+           ▼
+      Parsed Data
+           │
+           ▼
+         Table
+           │
+           ▼
+       Search Box
 ```
 
-This makes the system easier to extend.
+This makes the system easier to extend and maintain.
 
 For example, adding support for another format can be done by introducing a new parser and connecting it to the central dispatcher.
+
+Similarly, new data exploration features can be added as separate components without tightly coupling them to the file-parsing logic.
 
 ---
 
@@ -277,8 +325,11 @@ This project is being developed with several goals in mind:
 * Improve understanding of browser file APIs
 * Work with different data formats
 * Practice modular JavaScript architecture
+* Build reusable UI components
 * Write unit tests for browser functionality
+* Test individual data parsers
 * Build reusable file-processing logic
+* Practice component-level CSS organization
 * Avoid unnecessary framework abstraction
 * Create a foundation for a more complete data exploration tool
 
@@ -296,28 +347,44 @@ This project provides hands-on experience with:
 * DOM manipulation
 * Event-driven programming
 * Data parsing and transformation
+* Dynamic table rendering
+* Search and data filtering concepts
 * Feature-based architecture
+* Component-based CSS organization
 * Unit testing with Vitest
 * DOM testing with JSDOM
+* Testing data parsers
+* Testing UI components
 * Vite-based development workflows
 
 ---
 
 ## 🧪 Testing Philosophy
 
-Tests are written around application behavior rather than implementation details.
+Tests are written around application behavior and expected output rather than unnecessary implementation details.
 
-For example, the drag-and-drop feature is tested to verify that user interactions produce the expected behavior.
+For example, UI components are tested to verify that they render and behave correctly, while parsers are tested to verify that supported file formats produce the expected JavaScript data.
 
-As the project grows, the test suite will cover:
+The current test suite covers:
 
 * File selection
 * Drag & drop interactions
+* File parser selection
+* CSV parser output
+* Excel parser output
+* XML parser output
+* Search box functionality
+
+As the project grows, the test suite will cover:
+
 * Supported file types
 * Unsupported file types
-* Parser output
 * Error handling
 * Data transformation
+* Table behavior
+* Filtering
+* Sorting
+* Pagination
 * Export functionality
 
 ---
@@ -326,9 +393,9 @@ As the project grows, the test suite will cover:
 
 Data processing is designed to happen locally in the browser.
 
-The application does not require uploading files to a backend server for parsing.
+The application does not require uploading files to a backend server for parsing or exploring data.
 
-> **Note:** This project is currently under active development, and the final data-processing architecture may evolve as new features are introduced.
+> Note: This project is currently under active development, and the final data-processing architecture may evolve as new features are introduced.
 
 ---
 
@@ -344,8 +411,8 @@ The application does not require uploading files to a backend server for parsing
 
 ### Phase 2 — Data Explorer
 
-* [ ] Data table
-* [ ] Search
+* [x] Data table
+* [x] Search
 * [ ] Filtering
 * [ ] Sorting
 * [ ] Pagination
@@ -375,10 +442,13 @@ The project is still under development.
 
 At the moment:
 
-* The application is primarily focused on file ingestion and parsing.
 * Excel parsing currently works with the first worksheet.
-* XML data may require additional transformation before it can be displayed as a tabular dataset.
-* The complete data exploration and export workflow is not implemented yet.
+* XML data may require additional transformation before it can always be displayed as a fully normalized tabular dataset.
+* Column filtering is not implemented yet.
+* Column sorting is not implemented yet.
+* Pagination is not implemented yet.
+* Data export functionality is not implemented yet.
+* Some UX improvements, validation, and error-handling features are still planned.
 
 ---
 
@@ -394,15 +464,15 @@ For larger changes, please open an issue first to discuss the proposed change.
 
 ## 📜 License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the MIT License.
 
-See the [LICENSE](./LICENSE) file for more information.
+See the `LICENSE` file for more information.
 
 ---
 
 ## 👨‍💻 Author
 
-**Mohammad Amin Taheri**
+Mohammad Amin Taheri
 
 GitHub: [@amin83th](https://github.com/amin83th)
 
