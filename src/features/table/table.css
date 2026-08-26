@@ -29,3 +29,17 @@ table td {
 .table-wrapper table tbody tr:nth-child(even){
     background-color: var(--color-gray-300);
 }
+
+.table-wrapper table tbody .row-item{
+    cursor: pointer;
+}
+
+.table-wrapper table tbody .row-item:hover{
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.table-wrapper table tbody .row-item:active{
+    background-color: var(--color-secondary);
+    color: var(--color-white);
+}
