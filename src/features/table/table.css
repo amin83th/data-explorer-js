@@ -9,7 +9,7 @@
     scrollbar-width: thin;
 }
 
-.table-wrapper table{
+.table-wrapper table {
     margin: auto;
 }
 
@@ -19,27 +19,50 @@ table td {
     border-right: 1px solid var(--color-gray-300);
     padding: .5rem 1rem;
 }
-.table-wrapper table thead{
+
+.table-wrapper table thead {
     background-color: var(--color-secondary);
     color: var(--color-white);
     position: sticky;
     top: 0;
 }
 
-.table-wrapper table tbody tr:nth-child(even){
+.table-wrapper table tbody tr:nth-child(even) {
     background-color: var(--color-gray-300);
 }
 
-.table-wrapper table tbody .row-item{
-    cursor: pointer;
-}
-
-.table-wrapper table tbody .row-item:hover{
+.table-wrapper table tbody .row-item:hover {
     background-color: var(--color-primary);
     color: var(--color-white);
 }
 
-.table-wrapper table tbody .row-item:active{
+.table-wrapper table tbody .row-item:hover #operations button {
+    color: var(--color-white);
+}
+
+.table-wrapper table tbody .row-item:active {
     background-color: var(--color-secondary);
     color: var(--color-white);
+}
+
+.table-wrapper table #operations {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.table-wrapper table #operations button{
+    background: unset;
+    border: unset;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.table-wrapper table #operations button:first-child {
+    color: var(--color-danger);
+}
+
+.table-wrapper table #operations button:last-child {
+    color: var(--color-success);
 }
