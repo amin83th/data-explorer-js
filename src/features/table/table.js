@@ -1,3 +1,4 @@
+import { editTable } from "./modals/editTable";
 import "./table.css";
 
 export function table(data, searchValue = "") {
@@ -75,6 +76,13 @@ export function table(data, searchValue = "") {
                                 </div>
                             `;
         row.append(operations);
+
+        const editButton = operations.querySelector(".op-edit");
+
+        editButton.addEventListener("click", () => {
+            document.body.append(editTable(data[i]));
+        });
+
         for (let j = 0; j < headers.length; j++) {
             const cell = document.createElement("td");
             cell.textContent = data[i][headers[j]];
@@ -83,7 +91,6 @@ export function table(data, searchValue = "") {
 
         tbody.append(row);
     }
-
 
     return div;
 }
