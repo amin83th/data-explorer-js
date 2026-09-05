@@ -31,9 +31,18 @@ export function editTable(data) {
         inputDiv.classList.add("input-div")
         const input = document.createElement("input");
         const labelElement = document.createElement("label");
+        
+        input.autocomplete = 'off';
+        input.type = 'text';
+        input.name = label[i];        
+        input.id = 'input-' + i;
+        labelElement.htmlFor = input.id;
 
         labelElement.innerHTML = `${label[i]} : `;
         input.value = data[label[i]];
+        if (label[i].toLowerCase() == 'id') {
+            input.disabled = true;
+        }
 
         inputDiv.append(labelElement);
         inputDiv.append(input);
