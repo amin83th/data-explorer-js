@@ -1,8 +1,8 @@
 # Data Explorer JS
 
-A lightweight Vanilla JavaScript application for parsing, exploring, searching, and viewing data from XML, Excel, and CSV files directly in the browser.
+A lightweight Vanilla JavaScript application for parsing, exploring, searching, viewing, and managing data from XML, Excel, and CSV files directly in the browser.
 
-The project is built with modern JavaScript without using a frontend framework, with a focus on clean architecture, feature-based organization, reusable UI components, file parsing, and testability.
+The project is built with modern JavaScript without using a frontend framework, with a focus on clean architecture, feature-based organization, reusable UI components, file parsing, data exploration, and testability.
 
 > 🚧 Status: Work in Progress
 
@@ -10,9 +10,17 @@ The project is built with modern JavaScript without using a frontend framework, 
 
 ## ✨ Overview
 
-Data Explorer JS is a browser-based data exploration tool that allows users to upload common structured data files, convert their contents into JavaScript data structures, and explore the parsed data through a reusable table interface.
+Data Explorer JS is a browser-based data exploration tool that allows users to upload common structured data files, convert their contents into JavaScript data structures, and explore the parsed data through reusable UI components.
 
-The main goal of this project is to build a practical data-processing application using Vanilla JavaScript, while keeping the codebase modular, testable, and easy to extend.
+Users can upload files using the file picker or drag-and-drop interface. The application automatically detects the file type and delegates it to the appropriate parser.
+
+Parsed data is then displayed inside a reusable data table where users can:
+
+* View structured data
+* Search across all available fields
+* Open an edit modal for individual records
+
+The main goal of this project is to build a practical data-processing application using Vanilla JavaScript while keeping the codebase modular, testable, reusable, and easy to extend.
 
 Supported file formats:
 
@@ -37,6 +45,9 @@ Files can be selected through the file picker or dragged and dropped into the ap
 * 🔀 Automatic parser selection based on file extension
 * 📋 Display parsed data in a reusable data table
 * 🔍 Global search functionality
+* ✏️ Edit action for individual table records
+* 🪟 Dynamic edit modal generation based on record properties
+* 🔒 Automatic disabling of `id` fields inside the edit form
 * 🧩 Feature-based project structure
 * 🎨 Component-based CSS organization
 * 🧪 Unit testing with Vitest
@@ -44,6 +55,12 @@ Files can be selected through the file picker or dragged and dropped into the ap
 * 🧪 Tests for UI components
 * ⚡ Fast development environment powered by Vite
 * 🌐 Runs entirely in the browser
+
+### In Progress
+
+* 💾 Persist edited data after submitting the edit form
+* 🗑️ Delete individual table records
+* 🧪 Extended testing for table operations and edit modal behavior
 
 ### Planned
 
@@ -59,6 +76,7 @@ Files can be selected through the file picker or dragged and dropped into the ap
 * [ ] File validation and user-friendly error messages
 * [ ] Loading and processing states
 * [ ] Improved responsive UI
+* [ ] Accessibility improvements
 * [ ] End-to-end testing
 * [ ] Production deployment
 
@@ -154,6 +172,7 @@ The current test suite covers core application features, including:
 * Excel parser output
 * XML parser behavior
 * Search box functionality
+* Edit modal rendering and behavior
 
 ---
 
@@ -163,9 +182,11 @@ The current test suite covers core application features, including:
 data-explorer-js/
 │
 ├── src/
+│   │
 │   ├── assets/
 │   │
 │   ├── features/
+│   │   │
 │   │   ├── drag-drop/
 │   │   │   ├── dragDrop.js
 │   │   │   ├── dragDrop.css
@@ -187,6 +208,11 @@ data-explorer-js/
 │   │   │   └── searchBox.test.js
 │   │   │
 │   │   └── table/
+│   │       ├── modals/
+│   │       │   ├── editTable.js
+│   │       │   ├── editTable.css
+│   │       │   └── editTable.test.js
+│   │       │
 │   │       ├── table.js
 │   │       └── table.css
 │   │
@@ -203,7 +229,7 @@ data-explorer-js/
 
 The project follows a feature-based structure, keeping related functionality together instead of placing all JavaScript files into a single directory.
 
-Each feature is responsible for its own functionality and styling, making the project easier to maintain and extend as new features are added.
+Each feature is responsible for its own functionality, styling, and tests where applicable, making the project easier to maintain and extend as new features are added.
 
 ---
 
@@ -225,22 +251,46 @@ User selects or drops a file
       CSV    Excel    XML
        │      │       │
        ▼      ▼       ▼
-   PapaParse XLSX  fast-xml-parser
+   PapaParse XLSX fast-xml-parser
        │      │       │
        └──────┼───────┘
               ▼
       Parsed JavaScript Data
               │
               ▼
-         Data Table
+          Data Table
               │
-              ▼
-        Search / Explore
+       ┌──────┴──────┐
+       ▼             ▼
+     Search      Edit Record
 ```
 
-The central `fileParser()` function acts as the entry point and delegates the file to the appropriate parser based on its extension.
+The central `fileParser()` function acts as the entry point and delegates the uploaded file to the appropriate parser based on its extension.
 
-After parsing, the resulting JavaScript data can be rendered inside the data table and explored through the search functionality.
+After parsing, the resulting JavaScript data is rendered inside the reusable data table.
+
+Users can then search through the data or open the edit interface for individual records.
+
+---
+
+## ✏️ Table Operations
+
+The data table includes an `Operation` column for record-level actions.
+
+### Edit
+
+Each table row includes an edit action.
+
+When the edit button is clicked:
+
+1. The selected record is passed to the `editTable()` component.
+2. A dynamic modal is created.
+3. Input fields are generated based on the properties of the selected object.
+4. Existing values are automatically populated.
+5. Fields named `id` are disabled to prevent modification.
+6. Users can close the modal using the close button.
+
+> Note: The edit interface is currently implemented at the UI level. Persisting changes back into the main dataset is planned as the next step.
 
 ---
 
@@ -250,7 +300,7 @@ After parsing, the resulting JavaScript data can be rendered inside the data tab
 
 CSV files are parsed using Papa Parse.
 
-```js
+```javascript
 Papa.parse(file, {
     header: true,
     skipEmptyLines: true
@@ -278,7 +328,7 @@ The first worksheet is currently converted into an array of JavaScript objects.
 
 ### XML
 
-XML files are parsed using fast-xml-parser.
+XML files are parsed using `fast-xml-parser`.
 
 XML attributes are preserved during parsing, and the parser handles XML data before it is passed into the application's data-processing flow.
 
@@ -305,15 +355,19 @@ fileParser
            ▼
          Table
            │
-           ▼
-       Search Box
+    ┌──────┴──────┐
+    ▼             ▼
+Search Box    Edit Modal
 ```
 
-This makes the system easier to extend and maintain.
+This architecture makes the system easier to extend and maintain.
 
-For example, adding support for another format can be done by introducing a new parser and connecting it to the central dispatcher.
+For example:
 
-Similarly, new data exploration features can be added as separate components without tightly coupling them to the file-parsing logic.
+* Adding support for another format can be done by introducing a new parser and connecting it to the central dispatcher.
+* New table features can be added independently.
+* UI components can remain separated from parsing logic.
+* Modals and record-level operations can evolve without tightly coupling them to file-processing features.
 
 ---
 
@@ -322,14 +376,17 @@ Similarly, new data exploration features can be added as separate components wit
 This project is being developed with several goals in mind:
 
 * Practice building a real application with Vanilla JavaScript
-* Improve understanding of browser file APIs
+* Improve understanding of browser File and Blob APIs
 * Work with different data formats
 * Practice modular JavaScript architecture
 * Build reusable UI components
+* Create dynamic DOM-based interfaces
+* Build reusable file-processing logic
+* Practice feature-based architecture
+* Practice component-level CSS organization
 * Write unit tests for browser functionality
 * Test individual data parsers
-* Build reusable file-processing logic
-* Practice component-level CSS organization
+* Test reusable UI components
 * Avoid unnecessary framework abstraction
 * Create a foundation for a more complete data exploration tool
 
@@ -349,6 +406,8 @@ This project provides hands-on experience with:
 * Data parsing and transformation
 * Dynamic table rendering
 * Search and data filtering concepts
+* Dynamic modal generation
+* Object-based form generation
 * Feature-based architecture
 * Component-based CSS organization
 * Unit testing with Vitest
@@ -363,7 +422,11 @@ This project provides hands-on experience with:
 
 Tests are written around application behavior and expected output rather than unnecessary implementation details.
 
-For example, UI components are tested to verify that they render and behave correctly, while parsers are tested to verify that supported file formats produce the expected JavaScript data.
+For example:
+
+* UI components are tested to verify that they render and behave correctly.
+* File parsers are tested to verify that supported file formats produce the expected JavaScript data.
+* Interactive components are tested through DOM behavior.
 
 The current test suite covers:
 
@@ -374,6 +437,7 @@ The current test suite covers:
 * Excel parser output
 * XML parser output
 * Search box functionality
+* Edit modal rendering
 
 As the project grows, the test suite will cover:
 
@@ -382,6 +446,8 @@ As the project grows, the test suite will cover:
 * Error handling
 * Data transformation
 * Table behavior
+* Edit operations
+* Delete operations
 * Filtering
 * Sorting
 * Pagination
@@ -408,11 +474,15 @@ The application does not require uploading files to a backend server for parsing
 * [x] XML parsing
 * [x] File type detection
 * [x] Drag & drop upload
+* [x] File picker support
 
 ### Phase 2 — Data Explorer
 
 * [x] Data table
-* [x] Search
+* [x] Global search
+* [x] Edit modal interface
+* [ ] Persist edited records
+* [ ] Delete records
 * [ ] Filtering
 * [ ] Sorting
 * [ ] Pagination
@@ -428,9 +498,11 @@ The application does not require uploading files to a backend server for parsing
 ### Phase 4 — Quality & UX
 
 * [ ] Better error handling
+* [ ] File validation
 * [ ] Loading states
 * [ ] Responsive design
 * [ ] Accessibility improvements
+* [ ] Extended table operation tests
 * [ ] End-to-end tests
 * [ ] Production deployment
 
@@ -447,6 +519,8 @@ At the moment:
 * Column filtering is not implemented yet.
 * Column sorting is not implemented yet.
 * Pagination is not implemented yet.
+* Edited values are not yet persisted back to the original dataset.
+* The delete operation is not implemented yet.
 * Data export functionality is not implemented yet.
 * Some UX improvements, validation, and error-handling features are still planned.
 
