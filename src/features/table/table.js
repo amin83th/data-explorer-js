@@ -79,9 +79,21 @@ export function table(data, searchValue = "") {
 
         const editButton = operations.querySelector(".op-edit");
 
-        editButton.addEventListener("click", () => {
-            document.body.append(editTable(data[i]));
+        editButton.addEventListener("click", async () => {
+            const savedData = await editTable(data[i]);
+            refreshTableRow(row, { ...savedData }, headers);
+
         });
+
+        function refreshTableRow(row, data, headers) {
+            const cells = row.querySelectorAll('td');
+
+            for (let j = 0; j < headers.length; j++) {
+                if (cells[j + 1]) {
+                    cells[j + 1].textContent = data[headers[j]];
+                }
+            }
+        }
 
         for (let j = 0; j < headers.length; j++) {
             const cell = document.createElement("td");
