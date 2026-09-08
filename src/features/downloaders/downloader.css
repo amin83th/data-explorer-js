@@ -1,0 +1,12 @@
+.downloaders-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 1rem;
+}
+.downloaders-container div {
+    cursor: pointer;
+    font-size: 26px;
+}

@@ -2,6 +2,7 @@ import "./dragDrop.css";
 import { fileParser } from '../file-parser/fileParser';
 import { table } from '../table/table';
 import { searchBox } from "../search-box/searchBox";
+import { downloaders } from "../downloaders/downloader";
 export function dragDrop() {
     const section = document.createElement("section");
 
@@ -51,6 +52,7 @@ export function dragDrop() {
         divDragDrop.classList.add("hidden");
         // mainText.classList.add('hidden');
 
+        section.append(downloaders(data));
         section.append(searchElement);
         section.append(tableContainer);
     })
