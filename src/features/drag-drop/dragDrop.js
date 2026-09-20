@@ -3,6 +3,7 @@ import { fileParser } from '../file-parser/fileParser';
 import { table } from '../table/table';
 import { searchBox } from "../search-box/searchBox";
 import { downloaders } from "../downloaders/downloader";
+import { loading } from "../loading/loading";
 export function dragDrop() {
     const section = document.createElement("section");
 
@@ -33,7 +34,10 @@ export function dragDrop() {
     })
 
     fileInput.addEventListener('change', async (event) => {
-        const data = await fileParser(event.target.files[0]);
+        let data;
+        await loading.wrap(async () => {
+            data = await fileParser(event.target.files[0]);
+        });
         const tableContainer = document.createElement("div");
         tableContainer.classList.add("table-container");
 
@@ -48,9 +52,7 @@ export function dragDrop() {
         );
 
         const divDragDrop = section.querySelector("#drag-drop-wrapper");
-        // const mainText = document.querySelector(".mainText");
         divDragDrop.classList.add("hidden");
-        // mainText.classList.add('hidden');
 
         section.append(downloaders(data));
         section.append(searchElement);
