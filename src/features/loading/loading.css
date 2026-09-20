@@ -1,0 +1,20 @@
+.loading{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  background: var(--color-bg-modal);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loading.active {
+    display: flex;
+}
+
+.loading div{
+  font-size: 106px;
+  color: var(--color-primary);
+}
